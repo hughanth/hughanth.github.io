@@ -142,3 +142,10 @@ form {
 textarea {
   resize: none;
 } 
+
+.bottom-section {
+  padding: 10rem 0 0 2rem;
+}
+.bottom-section p {
+  text-align: left;
+}
