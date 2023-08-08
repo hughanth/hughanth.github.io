@@ -1,0 +1,127 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title> Morse Code Translator Utility </title>
+
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+    <div class="top-message">
+        <div class="paragraph-container">
+            <h1>Morse Code Translator</h1>
+            <p>-- --- .-. ... . / -.-. --- -.. . / - .-. .- -. ... .-.. .- - --- .-.</p>
+            <p>Enter your message below</p>
+        </div>
+    </div>
+    <section class="section">
+
+        <div id="main-section">
+        
+        
+        
+            <form onsubmit="return false">
+                <div class="input-output">
+                    <div class="label-items">
+                        <label for="input-box" class="label-item" id="input-label">Input</label>
+                        <select name="input-type" id="input-type" class="label-item">
+                            <option value="txt_2_morse">Text to Morse</option>
+                            <option value="morse_2_text">Morse to Text</option>
+                        </select>
+                        <p class="label-item" id="output-label">Output</p>
+                    </div>
+
+                    <div class="card-container">
+                        <div class="card">
+                            <!-- <input type="text" class="io-box" id="input-box" name="input-box" value="Hello World!"> -->
+                            <textarea name="input-box" id="input-box" class="io-box">Hello World!</textarea>
+                        </div>
+                        <div class="card">
+                            <p id='output' class="io-box"></p>
+                        </div>
+                    </div>
+                </div>
+                <input pys-onClick="sub" type="submit" id="btn-form" value="Submit">
+            </form>
+        
+        
+        </div>
+    </section>
+
+
+    <py-script>
+    
+        def sub(*args,**kwargs):
+            result_place = Element('output')
+        
+            text_in = Element("input-type").element.value
+        
+        
+        
+            if text_in == "txt_2_morse":
+                result_place.write(engine_txt_2_morse(Element("input-box").element.value))
+            elif text_in == "morse_2_text":
+                result_place.write(engine_morse_2_txt(Element("input-box").element.value))
+        
+        
+        
+        dict_txt_2_morse = { 'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.', 'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-', 'Y': '-.--', 'Z': '--..', '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.', ' ': '/', ".": ".-.-.-", ",": "--..--", "?": "..--..", "'": ".----.", "!": "-.-.--", "/": "-..-.", "(": "-.--.", ")": "-.--.-", "&": ".-...", ":": "---...", ";": "-.-.-.", "=": "-...-", "+": ".-.-.", "-": "-....-", "_": "..--.-", '"': ".-..-.", "$": "...-..-", "@": ".--.-.", "¿": "..-.-", "¡": "--...-" }
+        
+        dict_morse_2_txt = { '.-': 'A', '-...': 'B', '-.-.': 'C', '-..': 'D', '.': 'E', '..-.': 'F', '--.': 'G', '....': 'H', '..': 'I', '.---': 'J', '-.-': 'K', '.-..': 'L', '--': 'M', '-.': 'N', '---': 'O', '.--.': 'P', '--.-': 'Q', '.-.': 'R', '...': 'S', '-': 'T', '..-': 'U', '...-': 'V', '.--': 'W', '-..-': 'X', '-.--': 'Y', '--..': 'Z', '-----': '0', '.----': '1', '..---': '2', '...--': '3', '....-': '4', '.....': '5', '-....': '6', '--...': '7', '---..': '8', '----.': '9', ".-.-.-": ".", "--..--": ",", "..--..": "?", ".----.": "'", "-.-.--": "!", "-..-.": "/", "-.--.": "(", "-.--.-": ")", ".-...": "&", "---...": ":", "-.-.-.": ";", "-...-": "=", ".-.-.": "+", "-....-": "-", "..--.-": "_", ".-..-.": '"', "...-..-": "$", ".--.-.": "@", "..-.-": "¿", "--...-": "¡" }
+        
+        def engine_txt_2_morse(txt_input):
+            output_morse = []
+        
+            # loop thru each letter
+            for letter in txt_input.upper():
+        
+                # convert letter to morse if it exists
+                try:
+                    output_morse.append(dict_txt_2_morse[letter])
+                except:
+                    print(f"{letter} is not recognizable")
+        
+            # return morse
+            return " ".join(output_morse)
+        
+        def engine_morse_2_txt(morse_input):
+            output_txt = []
+        
+            # words are seperated by /
+            words = morse_input.split("/")
+            for word in words:
+        
+                # letters are seperated by spaces " "
+                letters = word.split(" ")
+        
+                # remove empty letters
+                while "" in letters:
+                    letters.remove("")
+        
+                # block to match each morse string to a character
+                for letter in letters:
+        
+                    # test for morse gibberish
+                    try:
+                        output_txt.append(dict_morse_2_txt[letter])
+                    except:
+                        print(f"{letter} is not recognizable")
+        
+                # end words with spaces
+                output_txt.append(" ")
+        
+            # TODO: capitalize first letter of sentences
+            # output string all lower case
+            return "".join(output_txt).lower()
+        
+        
+    </py-script>
+</body>
+</html>
